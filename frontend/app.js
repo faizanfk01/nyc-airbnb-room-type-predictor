@@ -1,4 +1,4 @@
-const RENDER_URL = "https://REPLACE-ME.onrender.com";
+const RENDER_URL = "https://nyc-airbnb-room-type-predictor-93bh.onrender.com";
 const LOCAL_HOSTS = ["localhost", "127.0.0.1"];
 const IS_LOCAL = LOCAL_HOSTS.includes(window.location.hostname);
 const API_BASE = IS_LOCAL ? "http://localhost:8000" : RENDER_URL;
