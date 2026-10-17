@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Room Type Predictor · NYC Airbnb</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#listing-form">Skip to form</a>
+
+  <header class="page-header">
+    <p class="eyebrow">NYC Airbnb · Room type predictor</p>
+    <h1>What kind of stay<br>is this listing?</h1>
+    <p class="lede">Enter a listing's details and the model predicts whether it's an entire home, a private room, or a shared room.</p>
+  </header>
+
+  <main class="layout">
+    <section class="card form-card" aria-labelledby="form-title">
+      <div class="card-head">
+        <h2 id="form-title">Listing details</h2>
+        <button type="button" id="example-btn" class="btn-ghost">Try an example</button>
+      </div>
+
+      <form id="listing-form" novalidate>
+        <fieldset>
+          <legend>Location</legend>
+          <div class="row">
+            <div class="field">
+              <label for="latitude">Latitude</label>
+              <input id="latitude" name="latitude" type="number" inputmode="decimal" step="any" placeholder="40.7128" aria-describedby="latitude-error">
+              <p class="error" id="latitude-error"></p>
+            </div>
+            <div class="field">
+              <label for="longitude">Longitude</label>
+              <input id="longitude" name="longitude" type="number" inputmode="decimal" step="any" placeholder="-73.9851" aria-describedby="longitude-error">
+              <p class="error" id="longitude-error"></p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="neighbourhood_group">Borough</label>
+              <select id="neighbourhood_group" name="neighbourhood_group" aria-describedby="neighbourhood_group-error">
+                <option value="">Loading…</option>
+              </select>
+              <p class="error" id="neighbourhood_group-error"></p>
+            </div>
+            <div class="field">
+              <label for="neighbourhood">Neighbourhood</label>
+              <select id="neighbourhood" name="neighbourhood" aria-describedby="neighbourhood-error" disabled>
+                <option value="">Choose a borough first</option>
+              </select>
+              <p class="error" id="neighbourhood-error"></p>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Pricing &amp; stay</legend>
+          <div class="row">
+            <div class="field">
+              <label for="price">Price per night (USD)</label>
+              <input id="price" name="price" type="number" inputmode="decimal" step="any" placeholder="120" aria-describedby="price-error">
+              <p class="error" id="price-error"></p>
+            </div>
+            <div class="field">
+              <label for="minimum_nights">Minimum nights</label>
+              <input id="minimum_nights" name="minimum_nights" type="number" inputmode="numeric" step="1" placeholder="2" aria-describedby="minimum_nights-error">
+              <p class="error" id="minimum_nights-error"></p>
+            </div>
+          </div>
+          <div class="field">
+            <div class="slider-head">
+              <label for="availability_365">Days available per year</label>
+              <output id="availability-readout" for="availability_365">180 / 365 days</output>
+            </div>
+            <input id="availability_365" name="availability_365" type="range" min="0" max="365" step="1" value="180" aria-describedby="availability_365-error">
+            <p class="error" id="availability_365-error"></p>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Reviews &amp; host</legend>
+          <div class="row">
+            <div class="field">
+              <label for="number_of_reviews">Total reviews</label>
+              <input id="number_of_reviews" name="number_of_reviews" type="number" inputmode="numeric" step="1" placeholder="24" aria-describedby="number_of_reviews-error">
+              <p class="error" id="number_of_reviews-error"></p>
+            </div>
+            <div class="field">
+              <label for="reviews_per_month">Reviews per month</label>
+              <input id="reviews_per_month" name="reviews_per_month" type="number" inputmode="decimal" step="any" placeholder="1.5" aria-describedby="reviews_per_month-error">
+              <p class="error" id="reviews_per_month-error"></p>
+            </div>
+          </div>
+          <div class="field">
+            <label for="calculated_host_listings_count">Listings by this host</label>
+            <input id="calculated_host_listings_count" name="calculated_host_listings_count" type="number" inputmode="numeric" step="1" placeholder="1" aria-describedby="calculated_host_listings_count-error">
+            <p class="error" id="calculated_host_listings_count-error"></p>
+          </div>
+        </fieldset>
+
+        <p class="form-message" id="form-message" role="alert"></p>
+
+        <button type="submit" id="predict-btn" class="btn-primary">
+          <span class="spinner" aria-hidden="true"></span>
+          <span class="btn-label">Predict room type</span>
+        </button>
+      </form>
+    </section>
+
+    <section class="card result-card" aria-labelledby="result-title">
+      <div class="card-head">
+        <h2 id="result-title">Prediction</h2>
+      </div>
+
+      <p class="api-message" id="api-message" role="status" aria-live="polite" hidden></p>
+
+      <div id="result-region" aria-live="polite">
+        <div class="empty" id="result-empty">
+          <svg class="empty-icon" viewBox="0 0 24 24" width="40" height="40" aria-hidden="true" focusable="false">
+            <path d="M4 11 12 4l8 7v8a1 1 0 0 1-1 1h-4v-5h-6v5H5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+          <p>Fill in the listing details and press <strong>Predict room type</strong> to see the result here.</p>
+        </div>
+
+        <div class="result" id="result" hidden>
+          <p class="result-label">Most likely</p>
+          <p class="result-value" id="result-value"></p>
+          <p class="close-call" id="close-call" hidden></p>
+          <ul class="bars" id="result-bars"></ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

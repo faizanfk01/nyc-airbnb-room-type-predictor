@@ -1,0 +1,5 @@
+-r ../backend/requirements.txt
+-c ../backend/constraints.txt
+matplotlib==3.10.6
+seaborn==0.13.2
+ipykernel==7.4.0
