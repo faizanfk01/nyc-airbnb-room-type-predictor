@@ -281,8 +281,6 @@ A failure inside the model returns `500` with `{"detail": "Prediction failed"}`.
 ├── data/
 │   ├── .gitkeep
 │   └── nyc_data.csv
-├── docs/
-│   └── screenshot.png
 ├── frontend/
 │   ├── index.html
 │   ├── styles.css
@@ -294,4 +292,4 @@ A failure inside the model returns `500` with `{"detail": "Prediction failed"}`.
 └── README.md
 ```
 
-`data/nyc_data.csv` is ignored by git and must be downloaded (see [Dataset](#dataset)). `docs/screenshot.png` is a placeholder path for the screenshot above.
+`data/nyc_data.csv` is ignored by git and must be downloaded (see [Dataset](#dataset)).
